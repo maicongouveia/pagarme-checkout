@@ -5,9 +5,9 @@ namespace Challenge\Model;
 use Challenge\Model;
 
 /**
-* Client
+* Costumer
 */
-class Client extends Model
+class Costumer extends Model
 {
 	
 	private $id;
@@ -24,8 +24,6 @@ class Client extends Model
 	private $street;
 	private $street_number;
 	private $zipcode;
-
-
 
     /**
      * @return mixed
