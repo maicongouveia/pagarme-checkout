@@ -21,3 +21,8 @@ Para subir a aplicação execute o comando com o terminal dentro da pasta raiz, 
 ```
 php -S localhost:8080
 ````
+
+Acesso no navegador
+```
+localhost:8080
+```
