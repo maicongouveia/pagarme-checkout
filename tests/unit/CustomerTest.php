@@ -1,11 +1,12 @@
 <?php
 
-use Challenge\Model\Costumer;
+use Challenge\Model\Customer;
+
 /**
  * @covers Costumer 
  */
 	
-class CostumerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit_Framework_TestCase
 {
 
 	/*
@@ -13,10 +14,10 @@ class CostumerTest extends \PHPUnit_Framework_TestCase
 	*/
 	public function testCostumerName()
 	{
-		$costumer = new Costumer();
-		$costumer->setName("Maicon Soares Gouveia");
+		$customer = new Customer();
+		$customer->setName("Maicon Soares Gouveia");
 
-		$this->assertEquals("Maicon Soares Gouveia", $costumer->getName());
+		$this->assertEquals("Maicon Soares Gouveia", $customer->getName());
 	}
 
 	/*
@@ -25,9 +26,9 @@ class CostumerTest extends \PHPUnit_Framework_TestCase
 	
 	/*public function testCostumerArray()
 	{
-		$costumer = new Costumer();
-		$costumer->setName("Maicon Soares Gouveia");
-		$costumer->setDocuments("cpf","43072807841");
+		$customer = new Costumer();
+		$customer->setName("Maicon Soares Gouveia");
+		$customer->setDocuments("cpf","43072807841");
 
 		$documents = [["type"=>"cpf","number"=>"43072807841"]];
 		$phone_numbers = array("+5511972431309","+1127317497");
@@ -42,7 +43,7 @@ class CostumerTest extends \PHPUnit_Framework_TestCase
 					"documents"=>$documents,
 					"phone_numbers"=>$phone_numbers
 				),
-				$costumer->getArray());
+				$customer->getArray());
 	}*/
 	
 
@@ -51,10 +52,10 @@ class CostumerTest extends \PHPUnit_Framework_TestCase
 	*/
 	/*public function testCostumerName()
 	{
-		$costumer = new Costumer();
-		$costumer->setName("Maicon Soares Gouveia");
+		$customer = new Costumer();
+		$customer->setName("Maicon Soares Gouveia");
 
-		$this->assertEquals("Maicon Soares Gouveia", $costumer->getName());
+		$this->assertEquals("Maicon Soares Gouveia", $customer->getName());
 	}*/
 }
 

@@ -7,7 +7,8 @@ use Challenge\Model;
 /**
 * Costumer
 */
-class Costumer extends Model
+
+class Customer extends Model
 {
 	
 	private $id;
