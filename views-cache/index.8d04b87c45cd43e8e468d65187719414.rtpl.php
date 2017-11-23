@@ -1,4 +1,4 @@
-	<div class='container'>
+<?php if(!class_exists('Rain\Tpl')){exit;}?>	<div class='container'>
 	    <div class='row' style='padding-top:25px; padding-bottom:25px;'>
 	        <div class='col-md-12'>
 	            <div id='mainContentWrapper'>

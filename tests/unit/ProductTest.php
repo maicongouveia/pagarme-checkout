@@ -24,14 +24,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 	public function testProductInfo()
 	{
 		$product = new Product("Fantasia - Darth Vader",125.00);
-		$product->setProvider("Maria Barros");
-		$product->setRateFree(true);
+		$product->setRecipient("Maria Barros");
 
 		$productArray = array(
-							"name"=>"Fantasia - Darth Vader",
-							"price"=>125.00,
-							"provider"=>"Maria Barros",
-							"rateFree"=>true
+							"id"=>"xx-Fantasia - Darth Vader",
+							"title"=>"Fantasia - Darth Vader",
+							"unit_price"=>125.00,
+							"quantity"=>1,
+							"tangible"=>true
 						);
 
 		$this->assertEquals($productArray, $product->getInfo());

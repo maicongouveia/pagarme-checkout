@@ -11,20 +11,27 @@ use Challenge\Model;
 class Customer extends Model
 {
 	
-	private $id;
-	private $name;
-	private $type;
+    private $name;
 	private $email;
-	private $documents = array();
-	private $phone_numbers = array();
-	private $birthday;
+    private $id;
+    private $type;
 	private $country;
-	private $state;
-	private $city;
-	private $neighborhood;
-	private $street;
-	private $street_number;
-	private $zipcode;
+    private $birthday;
+    private $phone_numbers;
+    private $documents;
+
+    public function __construct($name,$email,$id,$type,$country,$birthday,$phone_numbers,$documents)
+    {
+        $this->name = $name;
+        $this->email = $email;
+        $this->id = $id;
+        $this->type = $type;
+        $this->country = $country;
+        $this->birthday = $birthday;
+        $this->phone_numbers = $phone_numbers;
+        $this->documents = array();
+        array_push($this->documents, $documents);
+    }
 
     /**
      * @return mixed
@@ -141,7 +148,7 @@ class Customer extends Model
      */
     public function setPhoneNumbers($phone_numbers)
     {
-        $this->phone_numbers = $phone_numbers;
+        array_push($this->phone_numbers, $phone_numbers);
 
         return $this;
     }
@@ -306,17 +313,50 @@ class Customer extends Model
         return $this;
     }
 
-    public function getArray()
+    public function getInfo()
     {
     	return array(
-    			'id' => $this->getId(),
+    			'external_id' => "".$this->getId(),
     			'name' => $this->getName(),
     			'type' => $this->getType(),
     			'email' => $this->getEmail(),
     			'country' => $this->getCountry(),
     			'documents'=>$this->getDocuments(),
     			'phone_numbers'=>$this->getPhoneNumbers()
-    		);
+    		  );
+    }
+
+    public function getBillingInfo(){
+        return array(
+                  "name"=> $this->getName(),
+                  "address"=> array(
+                    "country"=> "br",
+                    "state"=> "sp",
+                    "city"=> "Cotia",
+                    "neighborhood"=> "Rio Cotia",
+                    "street"=> "Rua Matrix",
+                    "street_number"=> "9999",
+                    "zipcode"=> "06714360"
+                  )
+                );
+    }
+
+    public function getShippingInfo(){
+        return array(
+                "name"=> $this->getName(),
+                "fee"=> 4200,
+                "delivery_date"=> "2000-12-21",
+                "expedited"=> true,
+                "address"=> array(
+                    "country"=> "br",
+                    "state"=> "sp",
+                    "city"=> "Cotia",
+                    "neighborhood"=> "Rio Cotia",
+                    "street"=> "Rua Matrix",
+                    "street_number"=> "9999",
+                    "zipcode"=> "06714360"
+                  )
+                );
     }
 }
 

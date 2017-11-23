@@ -3,6 +3,7 @@
 namespace Challenge\Model;
 
 use Challenge\Model;
+use Challenge\Recipient;
 
 /**
 * Product
@@ -12,8 +13,7 @@ class Product extends Model
 	
 	private $name;
 	private $price;
-	private $provider;
-	private $rateFree;
+	private $recipient;
 
 	function __construct($name,$price)
 	{
@@ -64,9 +64,9 @@ class Product extends Model
     /**
      * @return mixed
      */
-    public function getProvider()
+    public function getRecipient()
     {
-        return $this->provider;
+        return $this->recipient;
     }
 
     /**
@@ -74,9 +74,9 @@ class Product extends Model
      *
      * @return self
      */
-    public function setProvider($provider)
+    public function setRecipient($recipient)
     {
-        $this->provider = $provider;
+        $this->recipient = $recipient;
 
         return $this;
     }
@@ -104,10 +104,11 @@ class Product extends Model
     public function getInfo()
     {
     	return array(
-					"name"=>$this->name,
-					"price"=>$this->price,
-					"provider"=>$this->provider,
-					"rateFree"=>$this->rateFree
+                    "id"=>"xx-".$this->name,
+					"title"=>$this->name,
+					"unit_price"=>$this->price,
+                    "quantity"=> 1,
+                    "tangible"=> true
 				);
     }
 }

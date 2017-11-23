@@ -4,10 +4,16 @@ require 'vendor/autoload.php';
 
 use Challenge\Page;
 use Challenge\Model\Checkout;
-use \PagarMe\Sdk\Customer\Customer;
-use \PagarMe\Sdk\Customer\Address;
-use \PagarMe\Sdk\Customer\Phone;
-use \PagarMe\Sdk\Card\Card;
+use Challenge\Model\Card;
+use Challenge\Model\Product;
+use Challenge\Model\Recipient;
+use Challenge\Model\Order;
+use Challenge\Model\Customer;
+
+
+use Challenge\Controller\CheckoutController;
+use Challenge\Controller\RecipientController;
+
 use \Slim\App;
 
 $config = [
@@ -17,215 +23,95 @@ $config = [
 ];
 $app = new App($config);
 
-
-
 $app->get('/', function() {
-    require('views/index.html');
+
+	$page = new Page();
+
+	$page->setTpl("index");
 });
 
 $app->get('/checkout/', function() {
 
+	/**
+	* Pagar.me API KEY 
+	*/
 	$apiKey = "ak_test_LuuGNNy0CHFLNqRdLzUQ8mtWxZaJQ6";
 
-	// $pagarMe = new \PagarMe\Sdk\Pagarme($apiKey);
+	$checkoutController = new CheckoutController($apiKey);
 
-	// $addressData = array(
-	// 				"street"=>"Rua Américo Batista",
-	// 				"streetNumber"=>"77",
-	// 				"neighborhood"=>"Jardim Iguatemi",
-	// 				"zipcode"=>"08380190",
-	// 				"complementary"=>"",
-	// 				"city"=>"São Paulo",
-	// 				"state"=>"SP",
-	// 				"country"=>"br"
-	// 				);
-	
-	// /** @var $address \PagarMe\Sdk\Customer\Address */
-	// $address = new Address($addressData);
+	/**
+	* Create a card to get the id from the Pagar.me API
+	*/
 
-	// $phoneData = array("ddd"=>"11","number"=>"972431309","ddi"=>"+55");	
+	$card = new Card("4018720572598048","1122","Aardvark Silva","123");
 
-	// /** @var $phone \PagarMe\Sdk\Customer\Phone */
-	// $phone = new Phone($phoneData);		
+	$card->setId($checkoutController->getIdCard($card));
 
-	// /** @var $customer \PagarMe\Sdk\Customer\Customer */
-	// $customer = $pagarMe->customer()->create(
-	// 										'John Dove',
-	// 										'john@site.com',
-	// 										'09130141095',
-	// 										$address,									
-	// 										$phone,
-	// 										'15021994',
-	// 										'M'
-	// 									);
+	/**
+	* Use Credit Card
+	*/
 
-	// /** @var $card \PagarMe\Sdk\Card\Card */
-	// $card = $pagarMe->card()->create(
-	//     '4242424242424242',
-	//     'JOHN DOVE',
-	//     '0722'
-	// );
+	$payment_method = "credit_card";
 
-	// /** @var $transaction \PagarMe\Sdk\Transaction\CreditCardTransaction */
-	// $transaction = $pagarMe->transaction()->creditCardTransaction(
-	//     37500,
-	//     $card,
-	//     $customer,
-	//     1,
-	//     true,
-	//     'https://requestb.in/12odcsu1',
-	//     null
-	// );
+	/**
+	* Set the split rule 
+	*/
 
+	$recipientController = new RecipientController("78945604567","Maria Barros",$apiKey);
+	$recipientController->getBankId();
+	$recipientController->getRecipientId();
+	$recipient = $recipientController->getRecipient();
 
+	$product = new Product("Fantasia do Darth Vader",125.00);
+	$product->setRecipient($recipient->getId());
 
-	// Faz um POST
-	$data = array(
-		"api_key"=> $apiKey,
-		"amount"=> 21000,
-	    "card_number"=> "4111111111111111",
-	    "card_cvv"=> "123",
-	    "card_expiration_date"=> "0922",
-	    "card_holder_name"=> "Morpheus Fishburne",
-	    "customer"=> array(
-	      "external_id"=> "#3311",
-	      "name"=> "Morpheus Fishburne",
-	      "type"=> "individual",
-	      "country"=> "br",
-	      "email"=> "mopheus@nabucodonozor.com",
-	      "documents"=> 
-	      array(
-	        array(
-	          "type"=> "cpf",
-	          "number"=> "00000000000"
-	        )
-	      ),
-	      "phone_numbers"=> array("+5511999998888", "+5511888889999"),
-	      "birthday"=> "1965-01-01"
-	    ),
-	    "billing"=> 
-	    array(
-	      "name"=> "Trinity Moss",
-	      "address"=> array(
-	        "country"=> "br",
-	        "state"=> "sp",
-	        "city"=> "Cotia",
-	        "neighborhood"=> "Rio Cotia",
-	        "street"=> "Rua Matrix",
-	        "street_number"=> "9999",
-	        "zipcode"=> "06714360"
-	      )
-	    ),
-	    "shipping"=> 
-	    array(
-	      "name"=> "Neo Reeves",
-	      "fee"=> 1000,
-	      "delivery_date"=> "2000-12-21",
-	      "expedited"=> true,
-	      "address"=> array(
-	        "country"=> "br",
-	        "state"=> "sp",
-	        "city"=> "Cotia",
-	        "neighborhood"=> "Rio Cotia",
-	        "street"=> "Rua Matrix",
-	        "street_number"=> "9999",
-	        "zipcode"=> "06714360"
-	      )
-	    ),
-	    "items"=> 
-	    array(
+	$recipientController = new RecipientController("145678979817","João Thiago Samuel Cavalcanti",$apiKey);
+	$recipientController->getBankId();
+	$recipientController->getRecipientId();
+	$recipient = $recipientController->getRecipient();
 
-	      array(
-	        "id"=> "r123",
-	        "title"=> "Red pill",
-	        "unit_price"=> 10000,
-	        "quantity"=> 1,
-	        "tangible"=> true
-	      ),
-	      array(
-	        "id"=> "b123",
-	        "title"=> "Blue pill",
-	        "unit_price"=> 10000,
-	        "quantity"=> 1,
-	        "tangible"=> true
-	      )
-	    )
-	);
+	$product2 = new Product("Fantasia do Cafú",100.00);
+	$product2->setRecipient($recipient->getId());
 
-	$ch = curl_init("https://api.pagar.me/1/transactions");
+	$recipient = new RecipientController("12797703847","César Anthony João Martins",$apiKey);
+	$recipientController->getBankId();
+	$recipientController->getRecipientId();
+	$recipient = $recipientController->getRecipient();
 
-	curl_setopt_array($ch, array(
-	    CURLOPT_POST => TRUE,
-	    CURLOPT_RETURNTRANSFER => TRUE,
-	    CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
-	    CURLOPT_POSTFIELDS => json_encode($data)
-	));
-	// Acessar a URL e retornar a saída
-	$output = curl_exec($ch);
-	// liberar
-	curl_close($ch);
-	// Imprimir a saída
-	// echo $output;
+	$product3 = new Product("Máscara de Cavalo",150.00);
+	$product3->setRecipient($recipient->getId());
 
-	$response = json_decode($output);
+	$order = new Order(42.00);
 
-	// echo "<pre>";
-	// print_r($response);
-	// echo "</pre>";
+	$order->addProduct($product);
+	$order->addProduct($product2);
+	$order->addProduct($product3);
+ 
+	$order->setMainRecipient($product->getRecipient(),15);
 
-	$idTransaction = $response->acquirer_id;
+	$customer = new Customer(
+					"Maicon Soares Gouveia",
+					"gouveia.maicon@gmail.com",
+					1,
+					"individual",
+					"br",
+					"23061994",
+					array("+5511972431309"),
+					array("type"=>"cpf","number"=>"43072807841")
+				);
 
-	// echo $idTransaction;
+	$infoTransaction = $checkoutController->setTransaction($order,$card,$customer);
 
-	//Fazendo o cadastro dos Recebedores
+	$page = new Page();
 
-	 $bankAccount = $pagarMe->bankAccount()->create(
-	    '341',
-	    '0932',
-	    '58054',
-	    '5',
-	    '26268738888',
-	    'API BANK ACCOUNT',
-	    '1'
-	);
-
-	$recipient = $pagarMe->recipient()->create(
-	    /** @var $customer \PagarMe\Sdk\BankAccount\BankAccount */
-	    $bankAccount,
-	    'monthly',
-	    13,
-	    true,
-	    true,
-	    42
-	);
-	$recipient2 = $pagarMe->recipient()->create(
-	    /** @var $customer \PagarMe\Sdk\BankAccount\BankAccount */
-	    $bankAccount,
-	    'monthly',
-	    13,
-	    true,
-	    true,
-	    42
-	);
-	$recipient3 = $pagarMe->recipient()->create(
-	    /** @var $customer \PagarMe\Sdk\BankAccount\BankAccount */
-	    $bankAccount,
-	    'monthly',
-	    13,
-	    true,
-	    true,
-	    42
-	);
-
-
-	$splitRule = $pagarMe->splitRule()->percentageRule(
-	    85,
-	    $recipient,
-	    true,
-	    true
-	);
-
-
+	$page->setTpl(
+			"checkout",
+			array(
+				"title"=>"Checkout",
+				"transaction"=>$infoTransaction["id"],
+				"status"=>$infoTransaction["status"]
+			)
+		);
 
 });
 
